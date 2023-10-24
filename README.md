@@ -11,4 +11,4 @@
  improve state management 
  render images in a new page
  add add text support
- 
+ # lyrics-card-generator
