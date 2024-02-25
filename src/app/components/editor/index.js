@@ -1,8 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from 'next/image'
 import { useSelector } from "react-redux";
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import AddTextModal from '../add-text-modal';
 import { Rnd } from "react-rnd";
 import { ToastContainer, toast } from 'react-toastify';
@@ -30,9 +30,11 @@ const Editor = () => {
 
   const allImages = [images[0], ...artistImages].filter(item => item != undefined)
   const [selectedImage, setSelectedimage] = useState(allImages[0]?.url)
-  if (images.length === 0 && artists.length === 0) {
-    router.push("/")
-  }
+  useEffect(() => {
+    if (images.length === 0 && artists.length === 0) {
+      router.push("/")
+    }
+  }, [images.length, artists.length])
   const onClickThumbnailHandler = (url) => {
     setSelectedimage(url)
   }
