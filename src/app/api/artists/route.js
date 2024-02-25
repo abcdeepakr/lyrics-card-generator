@@ -29,7 +29,6 @@ export async function GET(request) {
     }
     const searchParams = request.nextUrl.searchParams
     const artistIds = searchParams.get('artists')
-    console.log(artistIds)
     if(!artistIds){
         return Response.json({status:404, message:"artists not found"})
     }

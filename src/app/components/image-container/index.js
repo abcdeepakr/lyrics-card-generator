@@ -2,41 +2,25 @@
 import Image from 'next/image'
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { useRouter } from 'next/navigation'
 
 const ImageContainer = () => {
-    const { content, artistsData } = useSelector((state) => state.linkSearch)
-    const { artists } = artistsData
-    const { images = [] } = content.album || {}
-    if (images.length === 0) {
-        return
-    }
-    return (
-        <React.Fragment>
-            <div className='flex justify-center flex-row item-center flex-wrap'>
+    const { isLoading = false } = useSelector((state) => state.linkSearch)
 
-                {
-                    <Image src={images[0].url}
-                        width={500}
-                        height={500}
-                        alt="Picture of the author" />
-                }
-                {
-                    (artists || []).map(artist => {
-                        const { images = [] } = (artist || {})
-                        if (images && images.length != 0) {
-                            console.log(images)
-                            return (
-                                <Image src={images[0].url}
-                                className='m-[15px]'
-                                    key={artist.id}
-                                    width={500}
-                                    height={500}
-                                    alt="Picture of the author" />)
-                        }
-                    })
-                }
-            </div>
-        </React.Fragment>
-    )
+    if (isLoading) {
+        return <div className='flex justify-center flex-row item-center flex-wrap' >
+            {
+                [0, 0, 0, 0].map((item, index) => (
+                    <div role="status" class="space-y-8 animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex md:items-center m-2" key={index}>
+                        <div class="flex flex-col items-center justify-center w-full h-96 bg-dark-gray-300 rounded sm:w-96 dark:bg-gray-700 border-2	 border-white">
+                            <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+                            </svg>
+                        </div>
+                    </div>
+                ))
+            }
+        </div >
+    }
 }
 export default ImageContainer

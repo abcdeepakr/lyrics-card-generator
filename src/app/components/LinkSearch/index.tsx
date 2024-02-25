@@ -3,21 +3,25 @@ import React, { useState } from "react";
 import axios from "axios";
 import { validateUrl } from "../../utils/helpers/validate-url";
 import ImageContainer from "../image-container";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useRouter } from 'next/navigation'
+
 import {
   linkSearchInitiated,
   linkSearchSuccess,
-  linkSearchFailed,
   artistSearchSuccess
-} from "./link-slice";
+} from "../../store/link-slice";
+import Link from "next/link";
 
 export default function Search() {
+  const router = useRouter();
   const [enteredUrl, setEnteredUrl] = useState("");
   const dispatch = useDispatch();
   const pasteLinkHandler = (e: any) => {
     setEnteredUrl(e.target.value);
   };
   const fetchSongData = async () => {
+    dispatch(linkSearchInitiated())
     let trackId = "";
     if (validateUrl(enteredUrl)) {
       const url = new URL(enteredUrl);
@@ -49,6 +53,7 @@ export default function Search() {
       .then((res) => res.data)
       .catch((err) => err);
       dispatch(artistSearchSuccess({ artistsData }));
+      router.push("/editor")
   };
   return (
     <React.Fragment>
@@ -101,6 +106,7 @@ export default function Search() {
           </div>
         </div>
         <ImageContainer />
+        <Link href="/editor">editor</Link>
       </div>
     </React.Fragment>
   );

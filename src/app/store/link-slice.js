@@ -16,7 +16,6 @@ export const LinkSearchSlice = createSlice({
       state.isLoading = true
     },
     linkSearchSuccess: (state, action) => {
-      console.log("payload", action)
       state.isLoading = false
       state.searchUrl = action.payload.url
       state.content = action.payload.content
@@ -26,7 +25,6 @@ export const LinkSearchSlice = createSlice({
       state.isError = true
     },
     artistSearchSuccess: (state, action) => {
-      console.log("payload", action)
       state.isLoading = false
       state.artistsData = action.payload.artistsData
     },
