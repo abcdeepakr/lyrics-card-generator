@@ -8,8 +8,10 @@
  - render images in a new page
  - add add text support
  - resize div
+ - download image
+ - add custom image support
  
  todo:
  - store token in http cookie
  - improve state management 
- - download image
+ 

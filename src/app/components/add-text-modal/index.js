@@ -19,8 +19,8 @@ const AddTextModal = ({ onCloseCallback }) => {
     return (
         <Draggable>
             <div id="crud-modal" tabindex="-1" aria-hidden="true" class="w-full overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center md:inset-0 h-[calc(100%-1rem)] ">
-                <div class="relative p-4 w-full max-h-full">
-                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="relative p-4 min-w-[500px] max-h-full">
+                    <div class="relative bg-black shadow opacity-90 border-2 border-lime-300 rounded-lg">
                         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                                 Add Lyrics<p class="text-xs"> (you can drag me too)</p>
@@ -32,7 +32,8 @@ const AddTextModal = ({ onCloseCallback }) => {
                                 <span class="sr-only">Close modal</span>
                             </button>
                         </div>
-                        <p class="text-black text-left"
+                        <p class="pl-5 md-2">Text preview {currentLyrics.lyric ? ":" : "(start typing to see text)"}</p>
+                        <p class="text-white text-left pl-5"
                             style={{
                                 fontFamily: currentLyrics.fontFamily,
                                 fontWeight: currentLyrics.fontWeight,
@@ -49,33 +50,42 @@ const AddTextModal = ({ onCloseCallback }) => {
                         <form class="p-4 md:p-5">
 
                             {/* input box */}
-                            <div class="grid gap-4 mb-4 grid-cols-2">
-                                <div class="col-span-2">
-                                    <textarea onChange={(e) => onChangeHandler("lyric", e.target.value)} id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="nass maine kaati usme dilli nikli" value={currentLyrics.lyric || ""}></textarea>
+                            <div class="col-span-2">
+                                <textarea onChange={(e) => onChangeHandler("lyric", e.target.value)} id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="nass maine kaati usme dilli nikli" value={currentLyrics.lyric || ""}></textarea>
+                            </div>
+                            <div class="flex flex-col flex-wrap">
+                                {/* select font dropdown */}
+                                <SelectFontDropdown onChangeHandler={onChangeHandler} type="fontFamily" />
+
+                                {/* font color */}
+                                <div class="flex flex-row mt-4">
+                                    <label class="text-white pr-2" for="fontColor">Font color</label>
+                                    <input type="color" id="fontColor" name="fontColor" value={currentLyrics.fontColor || "white"} onChange={(e) => onChangeHandler("fontColor", e.target.value)} />
                                 </div>
+                                {/* font background color */}
+                                <div class="flex flex-row mt-4">
+                                    <label class="text-white pr-2" for="backgroundColor">background color</label>
+                                    <input type="color" id="backgroundColor" name="backgroundColor" value={currentLyrics.backgroundColor || "#fff"} onChange={(e) => onChangeHandler("backgroundColor", e.target.value)} />
+                                </div>
+
+                                {/* font size */}
+                                <div class="flex flex-row mt-4">
+                                    <label class="block mr-4 font-medium text-gray-900 dark:text-white">Font size:</label>
+                                    <CustomDropdown onChangeHandler={onChangeHandler} dropDownType="fontSize" />
+                                </div>
+
+                                {/* font weight */}
+                                <div class="flex flex-row mt-4">
+                                    <label class="block mr-4 font-medium text-gray-900 dark:text-white">Font weight:</label>
+                                    <CustomDropdown onChangeHandler={onChangeHandler} dropDownType="fontWeight" />
+                                </div>
+                                {/* add button */}
+                                <button type="button" onClick={() => addLyricHandler()} class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-fit	">
+                                    <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                                    add lyric
+                                </button>
                             </div>
 
-                            {/* select font dropdown */}
-                            <SelectFontDropdown onChangeHandler={onChangeHandler} type="fontFamily" />
-
-                            {/* font color */}
-                            <label class="text-black" for="fontColor">Font color</label>
-                            <input type="color" id="fontColor" name="fontColor" value={currentLyrics.fontColor || "black"} onChange={(e) => onChangeHandler("fontColor", e.target.value)} />
-
-                            {/* font background color */}
-                            <label class="text-black" for="backgroundColor">background color</label>
-                            <input type="color" id="backgroundColor" name="backgroundColor" value={currentLyrics.backgroundColor || "#fff"} onChange={(e) => onChangeHandler("backgroundColor", e.target.value)} />
-
-                            {/* font size */}
-                            {/* <label for="number-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">font size:</label>
-                            <input max="64" type="number" id="number-input" aria-describedby="helper-text-explanation" value={currentLyrics.fontSize || "16"} class="w-16 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="16" onChange={(e) => onChangeHandler("fontSize", e.target.value)} /> */}
-                            <CustomDropdown onChangeHandler={onChangeHandler} dropDownType="fontSize" />
-                            <CustomDropdown onChangeHandler={onChangeHandler} dropDownType="fontWeight" />
-                            {/* add button */}
-                            <button type="button" onClick={() => addLyricHandler()} class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                                add lyric
-                            </button>
                         </form>
                     </div>
                 </div>
