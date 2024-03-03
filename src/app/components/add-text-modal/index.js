@@ -20,7 +20,7 @@ const AddTextModal = ({ onCloseCallback }) => {
         <Draggable>
             <div id="crud-modal" tabindex="-1" aria-hidden="true" class="w-full overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center md:inset-0 h-[calc(100%-1rem)] ">
                 <div class="relative p-4 min-w-[500px] max-h-full">
-                    <div class="relative bg-black shadow opacity-90 border-2 border-lime-300 rounded-lg">
+                    <div class="relative bg-white shadow opacity-90 border-2 border-lime-300 rounded-lg">
                         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                                 Add Lyrics<p class="text-xs"> (you can drag me too)</p>
@@ -33,7 +33,7 @@ const AddTextModal = ({ onCloseCallback }) => {
                             </button>
                         </div>
                         <p class="pl-5 md-2">Text preview {currentLyrics.lyric ? ":" : "(start typing to see text)"}</p>
-                        <p class="text-white text-left pl-5"
+                        <p class="text-black text-left pl-5"
                             style={{
                                 fontFamily: currentLyrics.fontFamily,
                                 fontWeight: currentLyrics.fontWeight,
@@ -51,7 +51,7 @@ const AddTextModal = ({ onCloseCallback }) => {
 
                             {/* input box */}
                             <div class="col-span-2">
-                                <textarea onChange={(e) => onChangeHandler("lyric", e.target.value)} id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="nass maine kaati usme dilli nikli" value={currentLyrics.lyric || ""}></textarea>
+                                <textarea onChange={(e) => onChangeHandler("lyric", e.target.value)} id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="nass maine kaati usme dilli nikli" value={currentLyrics.lyric || ""}></textarea>
                             </div>
                             <div class="flex flex-col flex-wrap">
                                 {/* select font dropdown */}
@@ -59,24 +59,24 @@ const AddTextModal = ({ onCloseCallback }) => {
 
                                 {/* font color */}
                                 <div class="flex flex-row mt-4">
-                                    <label class="text-white pr-2" for="fontColor">Font color</label>
+                                    <label class="text-black pr-2" for="fontColor">Font color</label>
                                     <input type="color" id="fontColor" name="fontColor" value={currentLyrics.fontColor || "white"} onChange={(e) => onChangeHandler("fontColor", e.target.value)} />
                                 </div>
                                 {/* font background color */}
                                 <div class="flex flex-row mt-4">
-                                    <label class="text-white pr-2" for="backgroundColor">background color</label>
+                                    <label class="text-black pr-2" for="backgroundColor">background color</label>
                                     <input type="color" id="backgroundColor" name="backgroundColor" value={currentLyrics.backgroundColor || "#fff"} onChange={(e) => onChangeHandler("backgroundColor", e.target.value)} />
                                 </div>
 
                                 {/* font size */}
                                 <div class="flex flex-row mt-4">
-                                    <label class="block mr-4 font-medium text-gray-900 dark:text-white">Font size:</label>
+                                    <label class="block mr-4 font-medium text-gray-900">Font size:</label>
                                     <CustomDropdown onChangeHandler={onChangeHandler} dropDownType="fontSize" />
                                 </div>
 
                                 {/* font weight */}
                                 <div class="flex flex-row mt-4">
-                                    <label class="block mr-4 font-medium text-gray-900 dark:text-white">Font weight:</label>
+                                    <label class="block mr-4 font-medium text-gray-900 dark:text-black">Font weight:</label>
                                     <CustomDropdown onChangeHandler={onChangeHandler} dropDownType="fontWeight" />
                                 </div>
                                 {/* add button */}

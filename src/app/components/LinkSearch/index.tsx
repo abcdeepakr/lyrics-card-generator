@@ -5,16 +5,19 @@ import { validateUrl } from "../../utils/helpers/validate-url";
 import ImageContainer from "../image-container";
 import { useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation'
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import {
   linkSearchInitiated,
   linkSearchSuccess,
-  artistSearchSuccess
+  artistSearchSuccess,
+  searchError
 } from "../../store/link-slice";
-import Link from "next/link";
 
 export default function Search() {
   const router = useRouter();
+  const notify = (text: string) => toast(text);
   const [enteredUrl, setEnteredUrl] = useState("");
   const dispatch = useDispatch();
   const pasteLinkHandler = (e: any) => {
@@ -35,14 +38,24 @@ export default function Search() {
       url: `/api/track?trackId=${trackId}`,
     };
     let trackData = await axios(config)
-      .then((res) => res.data)
-      .catch((err) => err);
-    if (trackData.album) {
-      dispatch(linkSearchSuccess({ content: trackData, trackId: trackId }));
+      .then((res) => {
+        return res.data
+      })
+      .catch((err) => {
+        return err
+      });
+
+    if(trackData.isError){
+      notify("error occured :/")
+      dispatch(searchError())
+      return
+    }
+    if ((trackData || {}).album) {
+      dispatch(linkSearchSuccess({ content: trackData || {}, trackId: trackId }));
     } else {
     }
     let artists = ""
-    trackData.artists.map((item:any) =>{
+    trackData?.artists?.map((item:any) =>{
       artists+=item.id+","
     })
     const artistData = {
@@ -60,7 +73,7 @@ export default function Search() {
       <div className={`h-[30vh] w-[100%] flex justify-center items-center`}>
         <h1
           className={`text-4xl w-[100%] text-center font-bold tracking-tight text-lime-300 sm:text-6xl`}>
-          Generate Lyrics Cards
+          Generate Lyric Cards
         </h1>
       </div>
       <div className="w-[100%] flex flex-col justify-center items-center m-auto">
@@ -106,8 +119,8 @@ export default function Search() {
           </div>
         </div>
         <ImageContainer />
-        <Link href="/editor">editor</Link>
       </div>
+      <ToastContainer/>
     </React.Fragment>
   );
 }

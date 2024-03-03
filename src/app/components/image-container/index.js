@@ -1,14 +1,12 @@
 "use client"
-import Image from 'next/image'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useRouter } from 'next/navigation'
 
 const ImageContainer = () => {
     const { isLoading = false } = useSelector((state) => state.linkSearch)
 
     if (isLoading) {
-        return <div className='flex justify-center flex-row item-center flex-wrap' >
+        return <div class='flex justify-center flex-row item-center flex-wrap' >
             {
                 [0, 0, 0, 0].map((item, index) => (
                     <div role="status" class="space-y-8 animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex md:items-center m-2" key={index}>

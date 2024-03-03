@@ -1,6 +1,6 @@
 import { getAuthToken } from "../utils/auth"
 const axios = require('axios');
-
+import { cookies } from 'next/headers'
 
 const getTrack = async ({ access_token, trackId }) => {
     let config = {
@@ -11,7 +11,6 @@ const getTrack = async ({ access_token, trackId }) => {
             'Authorization': `Bearer ${access_token}`
         }
     };
-
     return await axios.request(config)
         .then((response) => {
             return { data: response.data, status: response.status, isError: false }
@@ -22,17 +21,22 @@ const getTrack = async ({ access_token, trackId }) => {
 
 }
 
-export async function GET(request) {
-    const response = await getAuthToken()
-    if (response.error) {
-        return Response.error({ ...response })
+export async function GET(req) {
+    const cookieStore = cookies()
+    let access_token = cookieStore.get('access_token')?.value
+    if (!access_token) {
+        const authTokenData = await getAuthToken()
+        if (authTokenData.error) {
+            return Response.error({ ...response })
+        }
+        access_token = authTokenData.access_token || ""
     }
-    const searchParams = request.nextUrl.searchParams
+
+    const searchParams = req.nextUrl.searchParams
     const trackId = searchParams.get('trackId')
-    if(!trackId){
-        return Response.json({status:404, message:"trackId not found"})
+    if (!trackId) {
+        return Response.json({ status: 404, message: "trackId not found" })
     }
-    const { access_token } = response.data
     const trackData = await getTrack({ access_token, trackId })
     if (trackData.error) {
         return Response.json(trackData)

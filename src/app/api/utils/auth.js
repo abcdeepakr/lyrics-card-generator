@@ -1,5 +1,6 @@
 const axios = require('axios');
 const qs = require('qs');
+import { cookies } from 'next/headers'
 
 export const getAuthToken = async () => {
     let data = qs.stringify({
@@ -7,7 +8,7 @@ export const getAuthToken = async () => {
         'client_id': process.env.CLIENT_ID,
         'client_secret': process.env.CLIENT_SECRET
     });
-    
+
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -20,10 +21,18 @@ export const getAuthToken = async () => {
 
     return await axios.request(config)
         .then((response) => {
-            const { data = {} } = response
-            return {data, status:response.status}
+            const { data: { access_token } } = response
+            const secondsToExpire = 60 * 60 * 1000; //one hour
+            cookies().set({
+                name: 'access_token',
+                value: access_token,
+                httpOnly: true,
+                path: '/',
+                expires: Date.now() + secondsToExpire
+            })
+            return { access_token, status: response.status }
         })
         .catch((error) => {
-            return {error:error.message, status:error.status}
+            return { error: error.message, status: error.status }
         });
 }

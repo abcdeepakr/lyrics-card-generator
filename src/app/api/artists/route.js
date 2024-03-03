@@ -1,5 +1,6 @@
 import { getAuthToken } from "../utils/auth"
 const axios = require('axios');
+import { cookies } from 'next/headers'
 
 
 const getArtists = async ({ access_token, artistIds }) => {
@@ -23,16 +24,20 @@ const getArtists = async ({ access_token, artistIds }) => {
 }
 
 export async function GET(request) {
-    const response = await getAuthToken()
-    if (response.error) {
-        return Response.error({ ...response })
+    const cookieStore = cookies()
+    let access_token = cookieStore.get('access_token')?.value
+    if (!access_token) {
+        const authTokenData = getAuthToken()
+        if (authTokenData.error) {
+            return Response.error({ ...response })
+        }
+        access_token = authTokenData.access_token || ""
     }
     const searchParams = request.nextUrl.searchParams
     const artistIds = searchParams.get('artists')
-    if(!artistIds){
-        return Response.json({status:404, message:"artists not found"})
+    if (!artistIds) {
+        return Response.json({ status: 404, message: "artists not found" })
     }
-    const { access_token } = response.data
     const artistData = await getArtists({ access_token, artistIds })
     if (artistData.error) {
         return Response.json(artistData)

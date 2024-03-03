@@ -1,7 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toPng } from 'html-to-image';
-import NextImage from 'next/image'
 import { useSelector } from "react-redux";
 import { useRouter } from 'next/navigation';
 import AddTextModal from '../add-text-modal';
@@ -12,13 +12,13 @@ import { generateRandomString } from '../../utils/helpers/image-name-generator'
 
 const Editor = () => {
   const router = useRouter();
-  const [size, setSize] = useState({ width: 320, height: 320 })
+  const [size, setSize] = useState({ width: 300, height: 250 });
   const [lyricPosition, setLyricPosition] = useState({ x: 50, y: 50 })
-  const [showAddTextModal, setShowAddTextModal] = useState(false)
+  const [showAddTextModal, setShowAddTextModal] = useState(false);
   const [fileDataURL, setFileDataURL] = useState([]);
   const [importedFiles, setImportedFiles] = useState([]);
-  const { content, artistsData } = useSelector((state) => state.linkSearch)
-  const { lyricData = {} } = useSelector((state) => state)
+  const { content, artistsData } = useSelector((state) => state.linkSearch);
+  const { lyricData = {} } = useSelector((state) => state);
   const imageRef = useRef(null)
 
   const { artists = [] } = artistsData
@@ -31,50 +31,57 @@ const Editor = () => {
     }
   })
 
-  // const downloadImageHandler = async () => {
-  //   console.log("document.getElementById('finalImage')", document.getElementById('finalImage'))
-  //   htmlToImage.toJpeg(document.getElementById('finalImage'), { quality: 1 })
-  //     .then(function (dataUrl) {
-  //       console.log("dataUrl", dataUrl)
-  //       var link = document.createElement('a');
-  //       link.download = generateRandomString();
-  //       link.href = dataUrl;
-  //       link.click();
-  //     });
-  // };
-
-
-
   const allImages = [images[0], ...artistImages].filter(item => item != undefined)
   const [selectedImage, setSelectedimage] = useState(allImages[0]?.url)
+  const [showPageLoader, setShowPageLoader] = useState(true)
 
-  const downloadImageHandler = () => {
+  useEffect(() => {
+    if (allImages.length) {
+      setShowPageLoader(false)
+    }
+  }, [allImages])
+  const notify = (text) => toast(text);
+  const downloadImageHandler = (action) => {
     if (imageRef.current === null) {
       return
     }
     toPng(imageRef.current, { cacheBust: true })
-      .then((dataUrl) => {
+      .then(async (dataUrl) => {
+        // console.log(dataUrl)
         const link = document.createElement('a');
         link.download = generateRandomString();
         link.href = dataUrl;
-        link.click();
+        let blob = await fetch(dataUrl).then(r => r.blob());
+        switch (action) {
+          case "DOWNLOAD": {
+            link.click()
+            return
+          };
+          case "COPY": {
+            navigator.clipboard.write([
+              new ClipboardItem({
+                'image/png': blob
+              })
+            ]);
+            notify("copied to clipboard")
+            return
+          };
+          default: {
+            link.click()
+            return
+          };
+        };
       })
       .catch((err) => {
-        // console.log(err);
+        return err;
       });
   }
-  useEffect(() => {
-    if (images.length === 0 && artists.length === 0) {
-      router.push("/")
-    }
-  }, [images.length, artists.length])
   const onClickThumbnailHandler = (url) => {
     setSelectedimage(url)
   }
   const addTextHandler = () => {
     setShowAddTextModal(!showAddTextModal)
   }
-  const notify = (text) => toast(text);
   const onDoubleClickLyric = () => {
     navigator.clipboard.writeText(lyricData.lyric);
     notify("lyric copied to clipboard")
@@ -114,6 +121,22 @@ const Editor = () => {
     }
   }, [importedFiles]);
   const allArtist = (songArtists || []).map((item) => item.name).join(", ")
+
+  if (!allImages.length) {
+    setTimeout(() => {
+      setShowPageLoader(false)
+      router.push('/')
+    }, 2500)
+    return showPageLoader &&
+      <div role="status" class="flex justify-center items-center h-[100vh]">
+        <svg aria-hidden="true" class="w-8 h-8 text-black animate-spin dark:text-gray-600 fill-lime-300" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+          <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+        </svg>
+        <span class="sr-only">Loading...</span>
+      </div>
+  }
+
   return (
     <React.Fragment>
       <div class="flex flex-row justify-between h-screen	">
@@ -132,7 +155,7 @@ const Editor = () => {
             </div>
             {lyricData.lyric &&
               <Rnd
-                className={`active:border-2 active:border-white`}
+                className={`hover:border-2 hover:border-white`}
                 size={{ width: size.width, height: size.height }}
                 position={{ x: lyricPosition.x, y: lyricPosition.y }}
                 onDragStop={(e, d) => {
@@ -142,12 +165,10 @@ const Editor = () => {
                 }}
                 onResizeStop={(e, direction, ref, delta, position) => {
                   setSize({ ...size, width: ref.style.width, height: ref.style.height });
-                  // setSize({ ...size, height: ref.style.height });
-                  // setHeight(ref.style.height);
                   setLyricPosition({ x: position.x, y: position.y });
-                  // setX(position.x);
-                  // setY(position.y);
                 }}
+                maxWidth={500} // Set maximum width of the container
+                maxHeight={500} // Set maximum height of the cont
               >
                 <p
                   class="text-white text-left cursor-grab active:cursor-grabbing"
@@ -180,7 +201,9 @@ const Editor = () => {
             m-2
             text-center	
             p-0
-            border-0"
+            border-0
+            hover:bg-gray-600
+            hover:opacity-0.9"
               onClick={() => addTextHandler()}>add text</button>
 
 
@@ -198,7 +221,23 @@ const Editor = () => {
             text-center	
             p-0
             border-0"
-              onClick={() => downloadImageHandler()}>Download</button>
+              onClick={() => downloadImageHandler("DOWNLOAD")}>Download</button>
+
+            <button
+              className="
+            w-[100px] 
+            h-[50px] 
+            rounded-md py-1.5 font-bold
+            text-lime-300
+            outline-none
+            ring-lime-600 
+            ring-1	
+            bg-black 
+            m-2
+            text-center	
+            p-0
+            border-0"
+              onClick={() => downloadImageHandler("COPY")}>Copy</button>
           </div>
         </div>
         <div class="flex flex-col overflow-scroll right-0 w-0.5/5 h-screen items-center ">
@@ -248,7 +287,13 @@ const Editor = () => {
         {showAddTextModal && <AddTextModal onCloseCallback={addTextHandler} />}
       </div>
       <ToastContainer />
-
+      {showPageLoader && <div role="status">
+        <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-lime-300" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+          <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+        </svg>
+        <span class="sr-only">Loading...</span>
+      </div>}
     </React.Fragment>
   );
 }
