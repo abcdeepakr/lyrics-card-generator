@@ -10,8 +10,9 @@
  - resize div
  - download image
  - add custom image support
- 
- todo:
  - store token in http cookie
  - improve state management 
+
+ TODO:
+ - use canvas
  
