@@ -3,11 +3,11 @@ import { Menu } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 const webSafeFonts = [
+    { name: "Verdana", fontFamily: "Verdana, sans-serif" },
     { name: "Arial", fontFamily: "Arial, sans-serif" },
     { name: "Helvetica", fontFamily: "Helvetica, sans-serif" },
     { name: "Tahoma", fontFamily: "Tahoma, sans-serif" },
     { name: "Trebuchet MS", fontFamily: "Trebuchet MS, sans-serif" },
-    { name: "Verdana", fontFamily: "Verdana, sans-serif" },
     { name: "Georgia", fontFamily: "Georgia, serif" },
     { name: "Palatino Linotype", fontFamily: "Palatino Linotype, Book Antiqua, Palatino, serif" },
     { name: "Times New Roman", fontFamily: "Times New Roman, Times, serif" },

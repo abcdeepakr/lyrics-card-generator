@@ -2,11 +2,11 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     lyric: "",
-    fontFamily: "",
+    fontFamily: "Verdana, sans-serif",
     fontSize: "",
-    fontColor: "",
+    fontColor: "#000000",
     fontWeight: "",
-    backgroundColor: ""
+    backgroundColor: "#ffffff"
 }
 
 export const lyricDataSlice = createSlice({

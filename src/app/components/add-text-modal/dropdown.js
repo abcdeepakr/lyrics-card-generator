@@ -8,8 +8,8 @@ const dropDownFields = {
     ],
     fontSize: [16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50]
 }
-export default function CustomDropdown({ onChangeHandler, dropDownType }) {
-    const [selectedValue, setSelectedValue] = useState(dropDownFields[dropDownType][0]);
+export default function CustomDropdown({ onChangeHandler, dropDownType, preSelectedValue }) {
+    const [selectedValue, setSelectedValue] = useState(preSelectedValue || dropDownFields[dropDownType][0]);
     const handleValueChange = (value) => {
         onChangeHandler(dropDownType, value)
         setSelectedValue(value);
@@ -28,7 +28,6 @@ export default function CustomDropdown({ onChangeHandler, dropDownType }) {
                         <Menu.Item key={index}>
                             <p class='text-gray-700' value={item} onClick={() => handleValueChange(item)}>
                                 {item}
-
                             </p>
                         </Menu.Item>
                     ))}

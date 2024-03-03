@@ -2,23 +2,27 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { toPng } from 'html-to-image';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation';
 import AddTextModal from '../add-text-modal';
 import { Rnd } from "react-rnd";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { generateRandomString } from '../../utils/helpers/image-name-generator'
-
+import ColorPairs from './color-pairs';
+import {
+  saveLyrics
+} from "../../store/lyrics-slice";
 const Editor = () => {
   const router = useRouter();
+  const { content, artistsData } = useSelector((state) => state.linkSearch);
+  const { lyricData = {} } = useSelector((state) => state);
+  const dispatch = useDispatch();
   const [size, setSize] = useState({ width: 300, height: 250 });
   const [lyricPosition, setLyricPosition] = useState({ x: 50, y: 50 })
   const [showAddTextModal, setShowAddTextModal] = useState(false);
   const [fileDataURL, setFileDataURL] = useState([]);
   const [importedFiles, setImportedFiles] = useState([]);
-  const { content, artistsData } = useSelector((state) => state.linkSearch);
-  const { lyricData = {} } = useSelector((state) => state);
   const imageRef = useRef(null)
 
   const { artists = [] } = artistsData
@@ -30,6 +34,10 @@ const Editor = () => {
       return images[0]
     }
   })
+
+  const updateQuickColorHandler = (selectedData) => {
+    dispatch(saveLyrics({ ...lyricData, fontColor: selectedData.textColor, backgroundColor: selectedData.backgroundColor }));
+  }
 
   const allImages = [images[0], ...artistImages].filter(item => item != undefined)
   const [selectedImage, setSelectedimage] = useState(allImages[0]?.url)
@@ -141,13 +149,13 @@ const Editor = () => {
     <React.Fragment>
       <div class="flex flex-row justify-between h-screen	">
         <div class="h-5/5 w-4/5 flex items-center justify-center flex-col">
-          {selectedImage && <div ref={imageRef} class="relative">
+          {selectedImage && <div ref={imageRef} class="relative bg-black">
             <img src={selectedImage}
               key={selectedImage}
               width={500}
               height={500}
               alt="selected image"
-              class="object-cover object-center"
+              class="object-cover object-center opacity-50"
             />
             <div class="pl-2 absolute bottom-0 text-black bg-lime-300 w-full h-auto opacity-90">
               <p class="font-bold text-lg">{trackName}</p>
@@ -182,13 +190,12 @@ const Editor = () => {
                     fontSize: lyricData.fontSize + "px"
                   }}>
                   {lyricData.lyric?.split('\n').map((line, index) => (
-                    <div style={{ backgroundColor: lyricData.backgroundColor }} class="mb-2 px-1" key={index}>{line}</div>
+                    <div style={{ backgroundColor: lyricData.backgroundColor }} class="mb-2 px-1 w-fit" key={index}>{line}</div>
                   ))}
                 </p>
               </Rnd>}
           </div>}
           <div>
-
             <button
               className="w-[80px] 
             h-[50px] 
@@ -205,8 +212,6 @@ const Editor = () => {
             hover:bg-gray-600
             hover:opacity-0.9"
               onClick={() => addTextHandler()}>add text</button>
-
-
             <button
               className="
             w-[100px] 
@@ -222,7 +227,6 @@ const Editor = () => {
             p-0
             border-0"
               onClick={() => downloadImageHandler("DOWNLOAD")}>Download</button>
-
             <button
               className="
             w-[100px] 
@@ -239,6 +243,7 @@ const Editor = () => {
             border-0"
               onClick={() => downloadImageHandler("COPY")}>Copy</button>
           </div>
+          <ColorPairs onClickHandler={updateQuickColorHandler} />
         </div>
         <div class="flex flex-col overflow-scroll right-0 w-0.5/5 h-screen items-center ">
           {fileDataURL.length ? fileDataURL.map(url => {
