@@ -5,7 +5,7 @@ import { validateUrl } from "../../utils/helpers/validate-url";
 import ImageContainer from "../image-container";
 import { useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation'
-import { toast,ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import {
@@ -45,7 +45,7 @@ export default function Search() {
         return err
       });
 
-    if(trackData.isError){
+    if (trackData.isError) {
       notify("error occured :/")
       dispatch(searchError())
       return
@@ -55,8 +55,8 @@ export default function Search() {
     } else {
     }
     let artists = ""
-    trackData?.artists?.map((item:any) =>{
-      artists+=item.id+","
+    trackData?.artists?.map((item: any) => {
+      artists += item.id + ","
     })
     const artistData = {
       method: "get",
@@ -65,8 +65,8 @@ export default function Search() {
     let artistsData = await axios(artistData)
       .then((res) => res.data)
       .catch((err) => err);
-      dispatch(artistSearchSuccess({ artistsData }));
-      router.push("/editor")
+    dispatch(artistSearchSuccess({ artistsData }));
+    router.push("/editor")
   };
   return (
     <React.Fragment>
@@ -102,7 +102,7 @@ export default function Search() {
                   sm:pl-2
 
                   "
-            placeholder="Paste song link"
+            placeholder="Paste spotify link"
             onChange={(e) => pasteLinkHandler(e)}
           />
           <div>
@@ -126,7 +126,7 @@ export default function Search() {
         </div>
         <ImageContainer />
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </React.Fragment>
   );
 }
