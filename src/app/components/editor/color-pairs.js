@@ -21,7 +21,7 @@ export default function ColorPairs({ onClickHandler }) {
     };
     return (
         <React.Fragment>
-            <div class="flex flex-wrap items-center justify-center" title="Add text and select a quick colour combo for the lyrics">
+            <div class="flex flex-wrap items-center justify-center sm:absolute sm:top-[135%]" title="Add text and select a quick colour combo for the lyrics">
                 {COLOR_PAIRS.map(pair => {
                     return (
                         <div onClick={() => handleValueChange(pair)} key={pair.id} class="w-[150px] h-[50px] m-[5px] flex flex-col justify-center items-center font-bold" style={{ background: pair.backgroundColor, color: pair.textColor }}>

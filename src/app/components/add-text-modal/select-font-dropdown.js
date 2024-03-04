@@ -27,7 +27,7 @@ export default function SelectFontDropdown({ onChangeHandler }) {
     return (
         <Menu as="div" class="relative inline-block text-left">
             <div>
-                <Menu.Button class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                <Menu.Button class="disableDrag inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                     {selectedFont}
                     <ChevronDownIcon class="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
                 </Menu.Button>
@@ -36,7 +36,7 @@ export default function SelectFontDropdown({ onChangeHandler }) {
                 <div class="py-1">
                     {webSafeFonts.map((font, index) => (
                         <Menu.Item key={index}>
-                            <p class='text-gray-700' value={font.fontFamily} onClick={() => handleFontChange(font)}>
+                            <p class='disableDrag text-gray-700' value={font.fontFamily} onClick={() => handleFontChange(font)}>
                                 {font.name}
 
                             </p>

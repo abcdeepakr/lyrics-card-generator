@@ -13,6 +13,6 @@ export default function EditorLayout({
   children: React.ReactNode;
 }) {
   return (
-        <Providers>{children}</Providers>
+    <Providers>{children}</Providers>
   );
 }

@@ -72,12 +72,12 @@ export default function Search() {
     <React.Fragment>
       <div className={`h-[30vh] w-[100%] flex justify-center items-center`}>
         <h1
-          className={`text-4xl w-[100%] text-center font-bold tracking-tight text-lime-300 sm:text-6xl`}>
+          className={`w-[100%] text-center font-bold tracking-tight text-lime-300 text-6xl sm:text-5xl`}>
           Generate Lyric Cards
         </h1>
       </div>
       <div className="w-[100%] flex flex-col justify-center items-center m-auto">
-        <div className="w-[100%] flex justify-center items-center m-auto">
+        <div className="w-[100%] flex justify-center items-center m-auto sm:flex-col	">
           <input
             type="text"
             name="price"
@@ -95,7 +95,13 @@ export default function Search() {
                   placeholder:text-lime-400 
                   text-base	
                   sm:leading-6
-                  bg-black"
+                  bg-black
+                  text-center
+
+                  sm:w-4/5
+                  sm:pl-2
+
+                  "
             placeholder="Paste song link"
             onChange={(e) => pasteLinkHandler(e)}
           />
