@@ -18,7 +18,7 @@ const Editor = () => {
   const { content, artistsData } = useSelector((state) => state.linkSearch);
   const { lyricData = {} } = useSelector((state) => state);
   const dispatch = useDispatch();
-  const [size, setSize] = useState({ width: 300, height: 250 });
+  const [size, setSize] = useState({ width: 300, height: 125 });
   const [lyricPosition, setLyricPosition] = useState({ x: 50, y: 50 })
   const [showAddTextModal, setShowAddTextModal] = useState(false);
   const [fileDataURL, setFileDataURL] = useState([]);
