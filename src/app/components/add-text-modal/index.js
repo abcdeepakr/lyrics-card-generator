@@ -55,7 +55,7 @@ const AddTextModal = ({ onCloseCallback }) => {
                             {/* input box */}
                             <div class="col-span-2">
                                 <textarea onChange={(e) => onChangeHandler("lyric", e.target.value)}  onMouseDown={e => e.stopPropagation()} id="description" rows="4" 
-                                class="disableDrag block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="nass maine kaati usme dilli nikli" value={currentLyrics.lyric || lyricData.lyric || ""}></textarea>
+                                class="disableDrag block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="nass maine kaati usme dilli nikli" value={currentLyrics.lyric || ""}></textarea>
                             </div>
                             <div class="flex flex-col flex-wrap">
                                 {/* select font dropdown */}
